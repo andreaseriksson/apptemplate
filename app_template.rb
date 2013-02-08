@@ -6,16 +6,12 @@ gem 'bourbon'
 
 gem "rspec-rails", group: [:test, :development]
 
-group :test do
-  gem "factory_girl_rails"
-  gem "capybara"
-  gem "guard-rspec"
-end
+gem "factory_girl_rails", group: [:test]
+gem "capybara", group: [:test]
+gem "guard-rspec", group: [:test]
 
-group :development do
-  gem "better_errors"
-  gem "binding_of_caller"
-end
+gem "better_errors", group: [:development]
+gem "binding_of_caller", group: [:development]
 
 run "bundle install"
 generate "rspec:install"
