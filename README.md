@@ -1,3 +1,5 @@
+https://raw.github.com/andreaseriksson/apptemplate/master/app_template.rb
+
 # ./config/application.rb
 config.generators.stylesheets = false
 config.generators.javascripts = false
@@ -26,3 +28,4 @@ CONFIG.symbolize_keys!
 
 
 lib > templates > erb > scaffold > _form.html.erb
+
