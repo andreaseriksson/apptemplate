@@ -3,6 +3,7 @@ gem 'bootstrap-sass', '~> 2.2.2.0'
 gem 'haml'
 gem 'simple_form'
 gem 'bourbon'
+gem 'bcrypt-ruby', '~> 3.0.0'
 
 gem "rspec-rails", group: [:test, :development]
 
