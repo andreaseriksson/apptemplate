@@ -27,7 +27,7 @@ if yes? "Do you want to generate a root controller?"
   remove_file "public/index.html"
 end
 
-run "wget https://raw.github.com/andreaseriksson/apptemplate/master/_form.html.erb"
+run "curl https://raw.github.com/andreaseriksson/apptemplate/master/_form.html.erb > lib/templates/erb/scaffold/_form.html.erb"
 
 git :init
 append_file ".gitignore", "config/database.yml"
