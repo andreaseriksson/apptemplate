@@ -29,3 +29,4 @@ CONFIG.symbolize_keys!
 
 lib > templates > erb > scaffold > _form.html.erb
 
+RAILS_ROOT/lib/templates/rails/scaffold_controller/controller.rb
