@@ -41,11 +41,11 @@ end
 
 application do
   # ./config/application.rb
-  config.generators.stylesheets = false
-  config.generators.javascripts = false
-  config.generators.helper      = false
+  "config.generators.stylesheets = false"
+  "config.generators.javascripts = false"
+  "config.generators.helper      = false"
   
-  
+  %Q{
   config.generators do |g|
     g.test_framework :rspec,
       :fixtures => true,
@@ -56,12 +56,13 @@ application do
       :request_specs => true
     g.fixture_replacement :factory_girl, :dir => "spec/factories"
   end
+  }
 end
 
 append_to_file 'config/application.rb' do
-  CONFIG = YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
-  CONFIG.merge! CONFIG.fetch(Rails.env, {})
-  CONFIG.symbolize_keys!
+  "CONFIG = YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))"
+  "CONFIG.merge! CONFIG.fetch(Rails.env, {})"
+  "CONFIG.symbolize_keys!"
 end
 
 
