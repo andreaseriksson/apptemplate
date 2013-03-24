@@ -36,16 +36,13 @@ if yes? "Do you want to generate a root controller?"
   remove_file "public/index.html"
 end
 
-#run "curl https://raw.github.com/andreaseriksson/apptemplate/master/_form.html.erb > lib/templates/erb/scaffold/_form.html.erb"
-
-
 application do
-  # ./config/application.rb
-  "config.generators.stylesheets = false"
-  "config.generators.javascripts = false"
-  "config.generators.helper      = false"
-  
   %Q{
+  config.generators.stylesheets = false
+  config.generators.javascripts = false
+  config.generators.helper      = false
+  
+  
   config.generators do |g|
     g.test_framework :rspec,
       :fixtures => true,
@@ -60,9 +57,11 @@ application do
 end
 
 append_to_file 'config/application.rb' do
-  "CONFIG = YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))"
-  "CONFIG.merge! CONFIG.fetch(Rails.env, {})"
-  "CONFIG.symbolize_keys!"
+  %Q{
+  CONFIG = YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
+  CONFIG.merge! CONFIG.fetch(Rails.env, {})
+  CONFIG.symbolize_keys!
+  }
 end
 
 
