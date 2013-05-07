@@ -57,17 +57,33 @@ application do
 end
 
 append_to_file 'config/application.rb' do
-  %Q{
-  CONFIG = YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
-  CONFIG.merge! CONFIG.fetch(Rails.env, {})
-  CONFIG.symbolize_keys!
-  }
+%Q{
+CONFIG = YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
+CONFIG.merge! CONFIG.fetch(Rails.env, {})
+CONFIG.symbolize_keys!
+}
 end
 
 
 git :init
 append_file ".gitignore", "config/database.yml"
 append_file ".gitignore", "config/application.yml"
-run "cp config/database.yml config/example_database.yml"
+append_file ".gitignore", "public/assets/*"
+append_file ".gitignore", "public/uploads/*"
+
+run "cp config/database.yml config/database.example.yml"
 create_file "config/application.yml"
+append_to_file 'config/application.yml' do
+%Q{
+application_name: ''
+seed_user_name: ''
+seed_user_email: ''
+seed_user_password: ''
+application_creator: ''
+gmail_email: ''
+gmail_pass: ''
+host: ''
+}
+end
+run "cp config/application.yml config/application.example.yml"
 git add: ".", commit: "-m 'initial commit'"
