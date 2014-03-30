@@ -96,10 +96,8 @@ if yes? "Do you want to generate a admin area?[yes/no]"
   run "rake db:migrate && rake db:test:prepare"
   generate :controller, "sessions index"
 
-  inject_into_class "app/models/user.rb", User do
-    "  hvalidates_uniqueness_of :email\n"
-    #"  attr_accessible :email, :password, :password_confirmation\n"
-    #"  has_secure_password\n"
+  inject_into_file "app/models/user.rb", after: "class User < ActiveRecord::Base\n" do
+    "  hvalidates_uniqueness_of :email\n  attr_accessible :email, :password, :password_confirmation\n  has_secure_password\n"
   end
   
 end
