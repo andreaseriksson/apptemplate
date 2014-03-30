@@ -78,8 +78,7 @@ append_file ".gitignore", "public/uploads/*"
 run "cp config/database.yml config/database.example.yml"
 create_file "config/application.yml"
 append_to_file 'config/application.yml' do
-%Q{
-application_name: ''
+%Q{application_name: ''
 seed_user_name: ''
 seed_user_email: ''
 seed_user_password: ''
@@ -110,7 +109,6 @@ if yes? "Do you want to generate a admin area?[yes/no]"
 
   inject_into_file "app/models/user.rb", after: "class User < ActiveRecord::Base\n" do
 %Q{
-
   has_secure_password
   validates :email, :presence => true, :uniqueness => true  
   validates :password, presence: true, length: { in: 6..20 }, on: :create
@@ -136,7 +134,6 @@ if yes? "Do you want to generate a admin area?[yes/no]"
   
   inject_into_file "app/controllers/application_controller.rb", after: "protect_from_forgery with: :exception\n" do
 %Q{
-
   private
   
   def current_user
@@ -153,8 +150,7 @@ if yes? "Do you want to generate a admin area?[yes/no]"
   
   create_file "app/controllers/sessions_controller.rb"
   append_to_file "app/controllers/sessions_controller.rb" do
-%Q{
-class SessionsController < ApplicationController
+%Q{class SessionsController < ApplicationController
    
   def new
   end
@@ -188,8 +184,7 @@ end
   
   create_file "app/controllers/password_resets_controller.rb"
   append_to_file "app/controllers/password_resets_controller.rb" do
-%Q{
-class PasswordResetsController < ApplicationController
+%Q{class PasswordResetsController < ApplicationController
   
   def new
   end
@@ -283,26 +278,58 @@ end
 } 
   end
   
+  remove_file "app/mailers/user_mailer.rb"
+  create_file "app/mailers/user_mailer.rb"
+  append_to_file "app/mailers/user_mailer.rb" do
+%Q{class UserMailer < ActionMailer::Base
+  
+  default from: CONFIG[:gmail_email]
+
+  def password_reset(user)
+    @user = user
+    mail :to => user.email, :subject => "Password Reset"
+  end
+
+end
+
+}  
+  end
+  
+  remove_file "app/views/user_mailer/password_reset.text.erb"
+  create_file "app/views/user_mailer/password_reset.text.erb"
+  append_to_file "app/views/user_mailer/password_reset.text.erb" do
+%Q{
+To reset your password, click the URL below.
+<%= edit_password_reset_url(@user.password_reset_token) %>
+If you did not request your password to be reset, just ignore this email and your password will continue to stay the same.
+}  
+  end
+  
+  email = ask("Choose your sign in email").downcase
+  password = ask("Choose your sign in password (min 6 chars)")
+  gsub_file 'config/application.yml', "seed_user_email: ''", "seed_user_email: '#{email}'"
+  gsub_file 'config/application.yml', "seed_user_password: ''", "seed_user_password: '#{password}'"
+  append_to_file "db/seeds.rb", "User.create(email: CONFIG[:seed_user_email], password: CONFIG[:seed_user_password], password_confirmation: CONFIG[:seed_user_password])"
+  run "rake db:seed"
 end
 
 run "mv app/assets/stylesheets/application.css app/assets/stylesheets/application.css.scss"
 prepend_to_file 'app/assets/stylesheets/application.css.scss' do
-%Q{
-@import "bootstrap";
+%Q{@import "bootstrap";
 @import "font-awesome";
+
 }
 end
-append_to_file 'app/assets/stylesheets/application.css.scss', 'body{ padding-top: 50px; }'
+append_to_file 'app/assets/stylesheets/application.css.scss', '/n/nbody{ padding-top: 50px; }'
 
-gsub_file 'app/assets/javascripts/application.js', '//= require turbolinks', ''
+gsub_file 'app/assets/javascripts/application.js', '//= require turbolinks/n', ''
 
 
 # Main view
 remove_file "app/views/layouts/application.html.erb"
 create_file "app/views/layouts/application.html.erb"
 append_to_file "app/views/layouts/application.html.erb" do
-%Q{
-<!DOCTYPE html>
+%Q{<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
