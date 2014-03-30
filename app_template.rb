@@ -210,12 +210,12 @@ if yes? "Do you want to generate a admin area?[yes/no]"
 }  
   end
 
-  inject_into_file "app/controllers/application_controller.rb", after: '<li class="active"><a href="#">Home</a></li>\n' do
+  inject_into_file "app/views/layouts/application.html.erb", after: '<li class="active"><a href="#">Home</a></li>\n' do
 %Q{
             <% if current_user %>
               <li>Logged in as <%= current_user.email %> <%= link_to "Log Out", logout_path %></li>
             <% else %>
-              <li><%= link_to "Log In", login_path %>/li>
+              <li><%= link_to "Log In", login_path %></li>
             <% end %>
 }  
   end
@@ -247,7 +247,7 @@ if yes? "Do you want to generate a admin area?[yes/no]"
   def destroy
     cookies.delete(:auth_token)
     current_user = nil
-    redirect_to login_url(subdomain: "app"), notice: "Logged out!"
+    redirect_to login_path, notice: "Logged out!"
   end
   
 end
