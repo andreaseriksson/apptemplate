@@ -59,6 +59,7 @@ CONFIG.symbolize_keys!
 }
 end
 
+remove_dir 'test'
 
 git :init
 append_file ".gitignore", "config/database.yml"
@@ -97,8 +98,8 @@ if yes? "Do you want to generate a admin area?[yes/no]"
 
   inject_into_class "app/models/user.rb", User do
     "  hvalidates_uniqueness_of :email\n"
-    "  attr_accessible :email, :password, :password_confirmation\n"
-    "  has_secure_password\n"
+    #"  attr_accessible :email, :password, :password_confirmation\n"
+    #"  has_secure_password\n"
   end
   
 end
