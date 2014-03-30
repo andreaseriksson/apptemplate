@@ -59,10 +59,11 @@ CONFIG.symbolize_keys!
 }
 end
 
-inject_into_file "config/evinroments/development.rb", after: "config.assets.debug = true\n" do
+inject_into_file "config/environments/development.rb", after: "config.assets.debug = true\n" do
 %Q{
   
   config.action_mailer.default_url_options = { :host => "localhost:3000" }
+  
 }
 end
 
