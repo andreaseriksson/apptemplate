@@ -94,7 +94,69 @@ run "cp config/application.yml config/application.example.yml"
 generate :controller, "home index"
 route "root to: 'home\#index'"
 
+run "mv app/assets/stylesheets/application.css app/assets/stylesheets/application.css.scss"
+prepend_to_file 'app/assets/stylesheets/application.css.scss' do
+%Q{@import "bootstrap";
+@import "font-awesome";
 
+}
+end
+append_to_file 'app/assets/stylesheets/application.css.scss', 'body{ padding-top: 50px; }'
+
+gsub_file 'app/assets/javascripts/application.js', '//= require turbolinks', ''
+
+
+# Main view
+remove_file "app/views/layouts/application.html.erb"
+create_file "app/views/layouts/application.html.erb"
+append_to_file "app/views/layouts/application.html.erb" do
+%Q{<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title></title>
+    <%= stylesheet_link_tag "application", media: "all" %>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+      <%= yield %>
+    </div><!-- /.container -->
+
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </body>
+</html>
+}
+end
 
 if yes? "Do you want to generate a admin area?[yes/no]"
   generate :model, "user email:string:index password_digest auth_token:string:index password_reset_token password_reset_sent_at:datetime"
@@ -145,6 +207,16 @@ if yes? "Do you want to generate a admin area?[yes/no]"
     redirect_to login_url, alert: "Not authorized" if current_user.nil?
   end
 
+}  
+  end
+
+  inject_into_file "app/controllers/application_controller.rb", after: '<li class="active"><a href="#">Home</a></li>\n' do
+%Q{
+            <% if current_user %>
+              <li>Logged in as <%= current_user.email %> <%= link_to "Log Out", logout_path %></li>
+            <% else %>
+              <li><%= link_to "Log In", login_path %>/li>
+            <% end %>
 }  
   end
   
@@ -305,78 +377,12 @@ If you did not request your password to be reset, just ignore this email and you
 }  
   end
   
-  email = ask("Choose your sign in email").downcase
-  password = ask("Choose your sign in password (min 6 chars)")
+  email = ask("Choose your signin email:").downcase
+  password = ask("Choose your signin password (min 6 chars):")
   gsub_file 'config/application.yml', "seed_user_email: ''", "seed_user_email: '#{email}'"
   gsub_file 'config/application.yml', "seed_user_password: ''", "seed_user_password: '#{password}'"
   append_to_file "db/seeds.rb", "User.create(email: CONFIG[:seed_user_email], password: CONFIG[:seed_user_password], password_confirmation: CONFIG[:seed_user_password])"
   run "rake db:seed"
-end
-
-run "mv app/assets/stylesheets/application.css app/assets/stylesheets/application.css.scss"
-prepend_to_file 'app/assets/stylesheets/application.css.scss' do
-%Q{@import "bootstrap";
-@import "font-awesome";
-
-}
-end
-append_to_file 'app/assets/stylesheets/application.css.scss', '/n/nbody{ padding-top: 50px; }'
-
-gsub_file 'app/assets/javascripts/application.js', '//= require turbolinks/n', ''
-
-
-# Main view
-remove_file "app/views/layouts/application.html.erb"
-create_file "app/views/layouts/application.html.erb"
-append_to_file "app/views/layouts/application.html.erb" do
-%Q{<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title></title>
-    <%= stylesheet_link_tag "application", media: "all" %>
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
-
-    <div class="container">
-      <%= yield %>
-    </div><!-- /.container -->
-
-    <%= javascript_include_tag "application" %>
-    <%= csrf_meta_tags %>
-  </body>
-</html>
-}
 end
 
 git add: ".", commit: "-m 'initial commit'"
