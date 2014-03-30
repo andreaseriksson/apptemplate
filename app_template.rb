@@ -157,6 +157,6 @@ append_to_file "app/view/application.html.erb" do
   </body>
 </html>
 }
-
+end
 
 git add: ".", commit: "-m 'initial commit'"
