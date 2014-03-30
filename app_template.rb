@@ -102,7 +102,6 @@ if yes? "Do you want to generate a admin area?[yes/no]"
   run "rake db:migrate && rake db:test:prepare"
   generate :mailer, "user_mailer password_reset"
   
-  route "get 'signup', to: 'accounts#new', as: 'signup'"
   route "get 'login', to: 'sessions#new', as: 'login'"
   route "get 'logout', to: 'sessions#destroy', as: 'logout'"
   route "resources :sessions, only: [:new, :create, :destroy]"
@@ -220,8 +219,8 @@ end
 }    
   end
   
-  create_file "app/views/sessions/new.rb"
-  append_to_file "app/views/sessions/new.rb" do
+  create_file "app/views/sessions/new.html.erb"
+  append_to_file "app/views/sessions/new.html.erb" do
 %Q{
 <h1>Log In</h1>
 
@@ -244,8 +243,8 @@ end
 } 
   end
   
-  create_file "app/views/password_resets/new.rb"
-  append_to_file "app/views/password_resets/new.rb" do
+  create_file "app/views/password_resets/new.html.erb"
+  append_to_file "app/views/password_resets/new.html.erb" do
 %Q{
 <%= form_tag password_resets_path, :method => :post do %>
   <div class="field">
@@ -257,8 +256,8 @@ end
 } 
   end
   
-  create_file "app/views/password_resets/edit.rb"
-  append_to_file "app/views/password_resets/edit.rb" do
+  create_file "app/views/password_resets/edit.html.erb"
+  append_to_file "app/views/password_resets/edit.html.erb" do
 %Q{
 <%= form_for @user, url: password_reset_path(params[:id]) do |f| %>
   <% if @user.errors.any? %>
@@ -285,6 +284,17 @@ end
   end
   
 end
+
+run "mv app/assets/stylesheets/application.css app/assets/stylesheets/application.css.scss"
+prepend_to_file 'app/assets/stylesheets/application.css.scss' do
+%Q{
+@import "bootstrap";
+@import "font-awesome";
+}
+end
+append_to_file 'app/assets/stylesheets/application.css.scss', 'body{ padding-top: 50px; }'
+
+gsub_file 'app/assets/javascripts/application.js', '//= require turbolinks', ''
 
 
 # Main view
