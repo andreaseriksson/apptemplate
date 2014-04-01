@@ -150,7 +150,7 @@ append_to_file "app/views/layouts/application.html.erb" do
     <![endif]-->
   </head>
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -232,17 +232,12 @@ if yes? "Do you want to generate a admin area?[yes/no]"
 }  
   end
   
-  inject_into_file "app/views/layouts/application.html.erb", after: '<div class="container">' do
-%Q{
-  Smurf
-}  
-  end
     
   inject_into_file "app/views/layouts/application.html.erb", after: '</ul>' do
 %Q{
           <p class="navbar-text navbar-right">
             <% if current_user %>
-              Signed in as <%= current_user.email %> <%= link_to "Log Out", logout_path %>
+              Signed in as <%= current_user.email %> | <%= link_to "Sign out", logout_path %>
             <% else %>
               <%= link_to "Sign In", login_path %>
             <% end %>
