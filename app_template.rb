@@ -6,6 +6,12 @@ gem 'simple_form'
 gem 'bourbon'
 gem 'bcrypt-ruby', '~> 3.1.2'
 gem 'will_paginate-bootstrap'
+
+gsub_file 'Gemfile', "gem 'turbolinks'", "# gem 'turbolinks'"
+gsub_file 'Gemfile', "gem 'sass-rails'", "# gem 'sass-rails'"
+
+gem 'sass-rails', git: 'https://github.com/zakelfassi/sass-rails'
+
 #gem 'ancestry'
 #gem 'acts_as_list'
 
@@ -14,8 +20,8 @@ gem_group :test do
   gem "factory_girl_rails"
   gem "capybara"
   gem "guard-rspec"
-  gem "faker"
-  gem "poltergeist"
+  #gem "faker"
+  #gem "poltergeist"
 end
 
 gem_group :development do
@@ -106,8 +112,8 @@ prepend_to_file 'app/assets/stylesheets/application.css.scss' do
 end
 append_to_file 'app/assets/stylesheets/application.css.scss', 'body{ padding-top: 50px; }'
 
-gsub_file 'app/assets/javascripts/application.js', '//= require turbolinks', ''
-
+gsub_file 'app/assets/javascripts/application.js', '//= require turbolinks', '//= require bootstrap'
+inject_into_file "app/assets/javascripts/application.js", "//= require icheck.min", after: "//= require bootstrap\n"
 
 # Main view
 remove_file "app/views/layouts/application.html.erb"
@@ -124,6 +130,7 @@ append_to_file "app/views/layouts/application.html.erb" do
 
     <title></title>
     <%= stylesheet_link_tag "application", media: "all" %>
+    
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -213,7 +220,7 @@ if yes? "Do you want to generate a admin area?[yes/no]"
 }  
   end
 
-  inject_into_file "app/views/layouts/application.html.erb", after: '<!--/.navbar-nav -->\n' do
+  inject_into_file "app/views/layouts/application.html.erb", after: '</ul><!--/.navbar-nav -->\n' do
 %Q{
           <p class="navbar-text navbar-right">
             <% if current_user %>
