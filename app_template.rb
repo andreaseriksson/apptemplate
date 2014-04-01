@@ -116,12 +116,12 @@ gsub_file 'app/assets/javascripts/application.js', '//= require turbolinks', '//
 inject_into_file "app/assets/javascripts/application.js", "//= require icheck.min\n", after: "//= require bootstrap\n"
 append_to_file 'app/assets/javascripts/application.js' do
 %Q{
-  $('.checkbox input').iCheck({
+  $('.checkbox input').iCheck(\{
     checkboxClass: 'icheckbox_flat',
     increaseArea: '20%'
   \});
 
-  $('.radio input').iCheck({
+  $('.radio input').iCheck(\{
     radioClass: 'iradio_flat',
     increaseArea: '20%'
   \});
