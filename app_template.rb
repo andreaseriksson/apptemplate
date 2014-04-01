@@ -113,7 +113,7 @@ end
 append_to_file 'app/assets/stylesheets/application.css.scss', 'body{ padding-top: 50px; }'
 
 gsub_file 'app/assets/javascripts/application.js', '//= require turbolinks', '//= require bootstrap'
-inject_into_file "app/assets/javascripts/application.js", "//= require icheck.min", after: "//= require bootstrap\n"
+inject_into_file "app/assets/javascripts/application.js", "//= require icheck.min\n", after: "//= require bootstrap\n"
 
 # Main view
 remove_file "app/views/layouts/application.html.erb"
@@ -220,7 +220,7 @@ if yes? "Do you want to generate a admin area?[yes/no]"
 }  
   end
 
-  inject_into_file "app/views/layouts/application.html.erb", after: '</ul><!--/.navbar-nav -->\n' do
+  inject_into_file "app/views/layouts/application.html.erb", after: '          </ul><!--/.navbar-nav -->\n' do
 %Q{
           <p class="navbar-text navbar-right">
             <% if current_user %>
