@@ -152,7 +152,7 @@ append_to_file "app/views/layouts/application.html.erb" do
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><%= link_to 'Home', root_path %></li>
-          </ul><!--/.navbar-nav -->
+          </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
@@ -220,7 +220,7 @@ if yes? "Do you want to generate a admin area?[yes/no]"
 }  
   end
 
-  inject_into_file "app/views/layouts/application.html.erb", after: '          </ul><!--/.navbar-nav -->\n' do
+  inject_into_file "app/views/layouts/application.html.erb", after: '</ul>\n' do
 %Q{
           <p class="navbar-text navbar-right">
             <% if current_user %>
