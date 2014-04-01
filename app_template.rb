@@ -1,9 +1,11 @@
 
 gem 'bootstrap-sass', '~> 3.1.1'
+gem 'bootflat-rails'
 gem 'font-awesome-rails'
 gem 'simple_form'
 gem 'bourbon'
 gem 'bcrypt-ruby', '~> 3.1.2'
+gem 'will_paginate-bootstrap'
 #gem 'ancestry'
 #gem 'acts_as_list'
 
@@ -98,6 +100,7 @@ run "mv app/assets/stylesheets/application.css app/assets/stylesheets/applicatio
 prepend_to_file 'app/assets/stylesheets/application.css.scss' do
 %Q{@import "bootstrap";
 @import "font-awesome";
+@import "bootflat";
 
 }
 end
@@ -141,8 +144,8 @@ append_to_file "app/views/layouts/application.html.erb" do
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-          </ul>
+            <li class="active"><%= link_to 'Home', root_path %></li>
+          </ul><!--/.navbar-nav -->
         </div><!--/.nav-collapse -->
       </div>
     </div>
@@ -210,13 +213,15 @@ if yes? "Do you want to generate a admin area?[yes/no]"
 }  
   end
 
-  inject_into_file "app/views/layouts/application.html.erb", after: '<li class="active"><a href="#">Home</a></li>\n' do
+  inject_into_file "app/views/layouts/application.html.erb", after: '<!--/.navbar-nav -->\n' do
 %Q{
+          <p class="navbar-text navbar-right">
             <% if current_user %>
-              <li>Logged in as <%= current_user.email %> <%= link_to "Log Out", logout_path %></li>
+              Signed in as <%= current_user.email %> <%= link_to "Log Out", logout_path %>
             <% else %>
-              <li><%= link_to "Log In", login_path %></li>
+              <%= link_to "Sign In", login_path %>
             <% end %>
+          </p>
 }  
   end
   
