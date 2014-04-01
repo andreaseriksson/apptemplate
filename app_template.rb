@@ -232,13 +232,13 @@ if yes? "Do you want to generate a admin area?[yes/no]"
 }  
   end
   
-  inject_into_file "app/views/layouts/application.html.erb", after: '<div class="container">\n' do
+  inject_into_file "app/views/layouts/application.html.erb", after: '<div class="container">' do
 %Q{
   Smurf
 }  
   end
     
-  inject_into_file "app/views/layouts/application.html.erb", after: '</ul>\n' do
+  inject_into_file "app/views/layouts/application.html.erb", after: '</ul>' do
 %Q{
           <p class="navbar-text navbar-right">
             <% if current_user %>
