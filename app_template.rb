@@ -114,7 +114,19 @@ append_to_file 'app/assets/stylesheets/application.css.scss', 'body{ padding-top
 
 gsub_file 'app/assets/javascripts/application.js', '//= require turbolinks', '//= require bootstrap'
 inject_into_file "app/assets/javascripts/application.js", "//= require icheck.min\n", after: "//= require bootstrap\n"
+append_to_file 'app/assets/javascripts/application.js' do
+%Q{
+  $('.checkbox input').iCheck({
+    checkboxClass: 'icheckbox_flat',
+    increaseArea: '20%'
+  \});
 
+  $('.radio input').iCheck({
+    radioClass: 'iradio_flat',
+    increaseArea: '20%'
+  \});
+}
+end
 # Main view
 remove_file "app/views/layouts/application.html.erb"
 create_file "app/views/layouts/application.html.erb"
@@ -219,7 +231,13 @@ if yes? "Do you want to generate a admin area?[yes/no]"
 
 }  
   end
-
+  
+  inject_into_file "app/views/layouts/application.html.erb", after: '<div class="container">\n' do
+%Q{
+  Smurf
+}  
+  end
+    
   inject_into_file "app/views/layouts/application.html.erb", after: '</ul>\n' do
 %Q{
           <p class="navbar-text navbar-right">
